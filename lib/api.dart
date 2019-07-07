@@ -23,7 +23,7 @@ class Api {
           (map) => VideoModel.fromJson(map)
       ).toList();
 
-      print(videos);
+      return videos;
     } else {
       throw Exception("Failed to load videos");
     }
