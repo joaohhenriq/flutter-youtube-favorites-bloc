@@ -12,6 +12,7 @@ class Home extends StatelessWidget {
     final VideosBloc videosBloc = BlocProvider.getBloc<VideosBloc>();
 
     return Scaffold(
+      backgroundColor: Colors.black87,
       appBar: AppBar(
         title: Container(
           height: 25,
