@@ -27,7 +27,7 @@ dependencies:
   http:
   shared_preferences:
   rxdart:
-  bloc_pattern:
+  bloc_pattern: ^2.2.2+3
 
 dev_dependencies:
   flutter_test:

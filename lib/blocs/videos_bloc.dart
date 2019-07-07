@@ -5,15 +5,15 @@ import 'package:favoritos_youtube_bloc/models/video.dart';
 
 import '../api.dart';
 
-class VideosBloc implements BlocBase {
+class VideosBloc extends BlocBase {
 
   Api api;
   List<VideoModel> videos;
 
-  final _videosController = StreamController();
+  final _videosController = StreamController<List<VideoModel>>();
   Stream get outVideos => _videosController.stream;
 
-  final _searchController = StreamController();
+  final _searchController = StreamController<String>();
   Sink get inSearch => _searchController.sink;
 
   VideosBloc(){
@@ -25,32 +25,13 @@ class VideosBloc implements BlocBase {
   void _search(String search) async {
     videos = await api.search(search);
 
-    print(videos);
+    _videosController.sink.add(videos);
   }
 
   @override
   void dispose() {
     _videosController.close();
     _searchController.close();
+    super.dispose();
   }
-
-  @override
-  void addListener(listener) {
-    // TODO: implement addListener
-  }
-
-  @override
-  // TODO: implement hasListeners
-  bool get hasListeners => null;
-
-  @override
-  void notifyListeners() {
-    // TODO: implement notifyListeners
-  }
-
-  @override
-  void removeListener(listener) {
-    // TODO: implement removeListener
-  }
-
 }
