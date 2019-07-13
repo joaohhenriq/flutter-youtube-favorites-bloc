@@ -3,13 +3,16 @@ import 'dart:convert';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:favoritos_youtube_bloc/models/video.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoriteBloc extends BlocBase {
-
   Map<String, VideoModel> _favorites = {};
 
-  final _favController = StreamController<Map<String, VideoModel>>.broadcast();
+  //  final _favController = StreamController<Map<String, VideoModel>>.broadcast();
+  // substitui o stream controller acima, lebrando que o behavior subject já é broadcast
+  // BehaviorSubject envia o último dado que passou por ele
+  final _favController = BehaviorSubject<Map<String, VideoModel>>();
 
   Stream<Map<String, VideoModel>> get outFav => _favController.stream;
 
@@ -19,8 +22,8 @@ class FavoriteBloc extends BlocBase {
       if (prefs.getKeys().contains("favorites")) {
         _favorites =
             json.decode(prefs.getString("favorites")).map((key, value) {
-              return MapEntry(key, VideoModel.fromJson(value));
-            }).cast<String, VideoModel>();
+          return MapEntry(key, VideoModel.fromJson(value));
+        }).cast<String, VideoModel>();
 
         _favController.sink.add(_favorites);
       }
@@ -40,8 +43,8 @@ class FavoriteBloc extends BlocBase {
     _saveFav();
   }
 
-  void _saveFav(){
-    SharedPreferences.getInstance().then((prefs){
+  void _saveFav() {
+    SharedPreferences.getInstance().then((prefs) {
       prefs.setString("favorites", json.encode(_favorites));
     });
   }
